@@ -8,7 +8,7 @@ def g(x, n):
 
     Example
     =======
-    
+
     >>> g(2, 253)
     5
     >>> g(g(2, 253), 253)
@@ -16,6 +16,7 @@ def g(x, n):
 
     """
     return (((x ** 2) + 1) % n)
+
 
 def gcd(a, b):
     """gcd: finds the greatest common divisor of two numbers
@@ -32,11 +33,12 @@ def gcd(a, b):
     6
 
     """
-    
+
     if b == 0:
         return (a)
     a, b = b, a % b
     return (gcd(a, b))
+
 
 def pollards_rho(number):
     """Pollard's rho algorithm
@@ -47,7 +49,7 @@ def pollards_rho(number):
     of the composite number being factorized.
 
     *wikipedia -> pollard's rho algorithm*
-    
+
     """
     x = 2
     y = 2
@@ -55,7 +57,7 @@ def pollards_rho(number):
 
     while (d == 1):
         x = g(x, number)
-        y = g(g(y, number),number)
+        y = g(g(y, number), number)
         d = gcd(abs(x - y), number)
 
     # checking for lowest number 4
@@ -68,18 +70,18 @@ def pollards_rho(number):
     else:
         return ((d, number//d))
 
-    
+
 def format_factors(number, tup_fact):
     """
         Format factors for alx task
     """
     return (f"{number}={tup_fact[0]}*{tup_fact[1]}")
 
+
 def factorization(file):
     """
         Facotrizes numbers stored in file
     """
-    
     with open(file, 'r') as f:
         line = f.readline()
         while (line != "\n"):
@@ -89,8 +91,10 @@ def factorization(file):
                 print(format_factors(number, factors))
             line = f.readline()
 
+
 if __name__ == "__main__":
+
     import sys
+
     if len(sys.argv) == 2:
         factorization(sys.argv[1])
-
