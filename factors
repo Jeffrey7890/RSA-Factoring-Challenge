@@ -1,0 +1,96 @@
+#!/usr/bin/python3
+
+def g(x, n):
+    """g(x) function
+
+    a polynomial used in the pollard's rho algorithm,
+    g(x) = (x^2 + 1) mod n
+
+    Example
+    =======
+    
+    >>> g(2, 253)
+    5
+    >>> g(g(2, 253), 253)
+    26
+
+    """
+    return (((x ** 2) + 1) % n)
+
+def gcd(a, b):
+    """gcd: finds the greatest common divisor of two numbers
+
+    this function uses module version of Euclidean algorithm
+    for computation, e.g
+
+    * wikipedia -> Greatest common divisor * for more info
+
+    Example
+    =======
+
+    >>> gcd(48, 18)
+    6
+
+    """
+    
+    if b == 0:
+        return (a)
+    a, b = b, a % b
+    return (gcd(a, b))
+
+def pollards_rho(number):
+    """Pollard's rho algorithm
+
+    is an algorithm for integar facotrization, invented by John pollard
+    in 1975. it uses only a small amount of space, an its expected running
+    time is proportional to the square root of the smallest prime factor
+    of the composite number being factorized.
+
+    *wikipedia -> pollard's rho algorithm*
+    
+    """
+    x = 2
+    y = 2
+    d = 1
+
+    while (d == 1):
+        x = g(x, number)
+        y = g(g(y, number),number)
+        d = gcd(abs(x - y), number)
+
+    # checking for lowest number 4
+    if (number == 4):
+        return ((2, 2))
+
+    if d == number:
+        return (False)
+
+    else:
+        return ((d, number//d))
+
+    
+def format_factors(number, tup_fact):
+    """
+        Format factors for alx task
+    """
+    return (f"{number}={tup_fact[0]}*{tup_fact[1]}")
+
+def factorization(file):
+    """
+        Facotrizes numbers stored in file
+    """
+    
+    with open(file, 'r') as f:
+        line = f.readline()
+        while (line != "\n"):
+            number = int(line)
+            factors = pollards_rho(number)
+            if type(factors) is not bool:
+                print(format_factors(number, factors))
+            line = f.readline()
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) == 2:
+        factorization(sys.argv[1])
+
